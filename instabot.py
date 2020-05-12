@@ -1,15 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import yaml
 import time
 import random
 
 
 class InstaBot:
-    def __init__(self, username, password):
+    def __init__(self, path, bin_loc, username, password):
         # Setting up the Brave driver to work with Selenium webdriver:
         options = Options()
-        options.binary_location = r'C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe'
-        path = r'C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\chromedriver_win32\chromedriver.exe'
+        options.binary_location = bin_loc
         self.__driver = webdriver.Chrome(executable_path=path, chrome_options=options)
 
         # Defining class variables:
@@ -77,14 +77,35 @@ class InstaBot:
         self.__driver.delete_all_cookies()
 
 
-credentials = {'username': 'Enter your username here',
-               'password': 'Enter your password here'}
-hashtag_list = ['Enter hashtags you want to like or follow']
-# The number of photos to like/follow should be fairly low:
-number = 9
+def main():
 
-bot = InstaBot(credentials['username'], credentials['password'])
-bot.login()
-for hashtag in hashtag_list:
-    bot.like(hashtag, number)
-    bot.login()
+    config_path = r'D:\GitKraken\InstaBot\config.yaml'
+
+    try:
+        with open(config_path, 'r') as file:
+            config = yaml.safe_load(file)
+
+            bin_location = config['webdriver']['bin_location']
+            path = config['webdriver']['path']
+
+            username = config['credentials']['username']
+            password = config['credentials']['password']
+
+            hashtag_list = config['hashtags']
+
+            # The number of photos to like/follow should be fairly low:
+            number = config['ph_number']
+
+            bot = InstaBot(path, bin_location, username, password)
+            bot.login()
+            for hashtag in hashtag_list:
+                bot.like(hashtag, number)
+                bot.login()
+
+    except Exception as e:
+        print('Error reading the config file')
+        print(e)
+
+
+if __name__ == '__main__':
+    main()

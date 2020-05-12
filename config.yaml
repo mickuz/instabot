@@ -1,0 +1,9 @@
+webdriver:
+  path: C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe
+  bin_location: C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\chromedriver_win32\chromedriver.exe
+credentials:
+  username: <enter your username here>
+  password: <enter your password here>
+hashtags:
+  - <enter hashtags you want to follow or like>
+ph_number: 9
